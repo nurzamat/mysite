@@ -1,0 +1,36 @@
+{% extends "azat/base.html" %}
+
+{% block content %}
+<section class="hero-content">
+    <div class="post row ">
+        <div class="postWrapper ">
+            {% for image in images  %}
+                <img class="postImage" src="{{ image.image_post_page.url }}">
+            {% endfor %}
+            {% if not images %}
+                <img class="postImage" src="/media/default/no_image.jpg">
+            {% endif %}
+            <div class="postMeta">
+                <div class="postDescription">
+                    {{ post.content }}
+                </div>
+                <div class="postBadges">
+                    <span class="hit-count">20</span>
+                    <span class="price">400</span>
+                </div>
+                <div class="postAuthor">
+                    <a href="{% url 'azat:user_posts' post.user.id %}">
+                        <img class="avatar" src="{{ post.user.profile.avatar_30 }}">
+                        <span class="name">{% firstof post.user.profile.displayed_name post.user.username %}</span>
+                    </a>
+                    <a href="{% url 'azat:category_posts' post.category.id %}">
+                        <div class="category"> {{ post.category }}</div>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "azat/base.html" %}
+
+{% block content %}
+<section class="hero-content">
+    <div class="row panel">
+        {% if category.get_ancestors %}
+            {% for parent in category.get_ancestors %}
+                    <a class="" href="/category/{{ parent.id }}">{{ parent.name }}</a> &darr;
+            {% endfor %}
+        {% endif %}
+        <h3>{{ category.name }}</h3>
+        {% if category.get_children %}
+            {% for child in category.get_children %}
+                    <a class="button" href="/category/{{ child.id }}">{{ child.name }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row panel posts collapse">
+        {% for post in posts %}
+        <div class="postWrapper small-5 large-3 medium-3 column{% if forloop.last %} end {% endif %}">
+            <a class="th" href="{% url 'azat:post' post.pk %}">
+            {% for image in images %}
+                {% if image.post == post  %}
+                    <img class="postImage" src="{{ image.image_main_page.url }}">
+                {% endif %}
+            {% endfor %}
+            {% if post in no_image_posts %}
+                <img class="postImage" src="/media/default/no_image_main_page.jpg">
+            {% endif %}
+            </a>
+            <div class="postMeta">
+                <div class="postDescription">
+                    {{ post.content }}
+                </div>
+                <div class="postBadges">
+                    <span class="hit-count">20</span>
+                    <span class="price">50</span>
+                </div>
+                <div class="postAuthor">
+                    <a href="{% url 'azat:user_posts' post.user.id %}">
+                        <img class="avatar" src="{{ post.user.profile.avatar_30 }}">
+                        <span class="name">{% firstof post.user.profile.displayed_name post.user.username %}</span>
+                    </a>
+                    <a href="{% url 'azat:category_posts' post.category.id %}">
+                        <div class="category"> {{ post.category }}</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if posts.has_previous or posts.has_next %}
+            <div class="clear_both">
+                <span class="current">
+                   Страница {{ posts.number }} из {{ posts.paginator.num_pages }}
+                </span>
+                {% if posts.has_previous %}<a href="?q={{ query }}&amp;page={{ posts.previous_page_number }}">{% endif %}&laquo; Предыдущая{% if posts.has_previous %}</a>{% endif %}
+                |
+                {% if posts.has_next %}<a href="?q={{ query }}&amp;page={{ posts.next_page_number }}">{% endif %}Следующая &raquo;{% if posts.has_next %}</a>{% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

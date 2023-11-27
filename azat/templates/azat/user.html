@@ -1,0 +1,69 @@
+{% extends "azat/base.html" %}
+
+{% block content %}
+<section class="hero-content">
+    <div class="row panel">
+        <h1>{{ user.profile.displayed_name }}</h1>
+
+        <div class="userWrapper">
+            <a class="th" href="/users/{{ user.username }}">
+                <img class="avatar" src="{{ user.profile.avatar_30 }}">
+                <span class="name">{% firstof user.profile.displayed_name user.username %}</span>
+            </a>
+            <p>Количество постов: {{ posts.count }}</p>
+
+            <p class="spacing">Репутация: {{ user.profile.follows.all.count }} </p>
+
+            <p class="spacing">Отзывы: {{ user.profile.followed_by.all.count }} </p>
+            {% if follow %}
+            <form action="/follow" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="follow" value="{{ user.id }}">
+                <input type="submit" value="Follow">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row panel posts collapse">
+        {% for post in posts %}
+        <div class="postWrapper small-5 large-3 medium-3 column{% if forloop.last %} end{% endif %}">
+            <a class="th" href="{% url 'azat:post' post.pk %}">
+            {% for image in images %}
+                {% if image.post == post  %}
+                    <img class="postImage" src="{{ image.image_main_page.url }}">
+                {% endif %}
+            {% endfor %}
+            {% if post in no_image_posts %}
+                <img class="postImage" src="/media/default/no_image_main_page.jpg">
+            {% endif %}
+            </a>
+            <div class="postMeta">
+                <div class="postDescription">
+                    {{ post.content }}
+                </div>
+                <div class="postBadges">
+                    <span class="hit-count">12</span>
+                    <span class="price">22</span>
+                </div>
+                <div class="postAuthor">
+                        <a href="{% url 'azat:category_posts' post.category.id %}">
+                            <div class="category"> {{ post.category }}</div>
+                        </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if posts.has_previous or posts.has_next %}
+            <div class="clear_both">
+                <span class="current">
+                   Страница {{ posts.number }} из {{ posts.paginator.num_pages }}
+                </span>
+                {% if posts.has_previous %}<a href="?q={{ query }}&amp;page={{ posts.previous_page_number }}">{% endif %}&laquo; Предыдущая{% if posts.has_previous %}</a>{% endif %}
+                |
+                {% if posts.has_next %}<a href="?q={{ query }}&amp;page={{ posts.next_page_number }}">{% endif %}Следующая &raquo;{% if posts.has_next %}</a>{% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

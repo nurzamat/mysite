@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+{% block head %}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ananas.io | Мобильная торговля</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'azat/css/foundation.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'azat/css/ananas.css' %}">
+    <script src="{% static 'azat/js/vendor/modernizr.js' %}"></script>
+</head>
+{% endblock %}
+<body>
+
+{% block header %}
+    <header>
+        <section class="row collapse">
+            <div class="large-2 columns">
+                <h1><a href="{% url 'azat:index' %}">Azat</a></h1>
+            </div>
+              <div class="large-10 columns">
+                  <form method="get" action="/search">
+                      <div class="search_box row collapse">
+                          <div class="small-10 columns">
+                            <input id="id_q" name="q" type="search" placeholder="Поиск" value="{{ query }}">
+                          </div>
+                          <div class="small-2 columns">
+                            <input type="submit" class="button postfix" value="Поиск">
+                          </div>
+                      </div>
+                  </form>
+              </div>
+        </section>
+    </header>
+{% endblock %}
+
+    <div class="mainWrapper">
+        <div class="wrapper">
+            {% block flash %}
+            {% if auth_form.non_field_errors or user_form.non_field_errors or Karma_form.errors %}
+            <div class="flash error">
+                {{ auth_form.non_field_errors }}
+                {{ user_form.non_field_errors }}
+                {{ Mozan_form.content.errors }}
+            </div>
+            {% endif %}
+            {% if notice %}
+            <div class="flash notice">
+                {{ notice }}
+            </div>
+            {% endif %}
+            {% endblock %}
+
+{% block content %}
+
+{% endblock %}
+        </div>
+    </div>
+ <footer>
+        <div class="row collapse">
+          <div class="large-6 columns">
+            <p>info@ananas.io</p>
+          </div>
+          <div class="large-6 columns">
+            <ul class="inline-list right">
+              <li><a href="{% url 'azat:orders' %}">Заказы</a></li>
+              <li><a href="#">О нас</a></li>
+              <li><a href="#">Соглашение о пользовании</a></li>
+            </ul>
+          </div>
+        </div>
+ </footer>
+</body>
+</html>

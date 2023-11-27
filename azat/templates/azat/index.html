@@ -1,0 +1,51 @@
+{% extends "azat/base.html" %}
+{% load static %}
+
+{% block header %}
+    <header class="home">
+        <div class="wrapper">
+            <h1><a >Azat</a></h1>
+            <h3>товары</h3>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+{% if auth_form.non_field_errors or user_form.non_field_errors %}
+<div class="flash error">
+    {{ auth_form.non_field_errors }}
+    {{ user_form.non_field_errors }}
+</div>
+{% endif %}
+
+<section>
+    <div class="row panel">
+      <div class="large-12 columns">
+          <form method="get" action="/search">
+              <div class="row collapse">
+                  <div class="small-10 columns">
+                    <input id="id_q" name="q" type="search" placeholder="Поиск">
+                  </div>
+                  <div class="small-2 columns">
+                    <input type="submit" class="button postfix" value="Поиск">
+                  </div>
+              </div>
+          </form>
+          <div class="row">
+    <div class="column small-centered large-8">
+      <ul class="small-block-grid-2 large-block-grid-3">
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 1 %}"><img src="{% static 'azat/img/food_icon.png' %}" />Продукты-питания</a></li>
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 2 %}"><img src="{% static 'azat/img/soap_icon.png' %}"/>Мыло моющие средства</a></li>
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 3 %}"><img src="{% static 'azat/img/ice_tea_icon.png' %}"/>Напитки</a></li>
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 5 %}"><img src="{% static 'azat/img/drinks_icon.png' %}"/>Спиртные напитки</a></li>
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 4 %}"><img src="{% static 'azat/img/cigarette-smoking.png' %}"/>Табачные изделия</a></li>
+        <li><a class="icon button info" href="{% url 'azat:category_posts' 6 %}"><img src="{% static 'azat/img/shopping_icon.png' %}"/>Другие товары</a></li>
+      </ul>
+    </div>
+    </div>
+      </div>
+    </div>
+</section>
+
+
+{% endblock %}
